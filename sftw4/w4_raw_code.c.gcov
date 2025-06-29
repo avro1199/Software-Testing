@@ -1,0 +1,48 @@
+        -:    0:Source:w4_raw_code.c
+        -:    0:Graph:w4_raw_code.gcno
+        -:    0:Data:-
+        -:    0:Runs:0
+        -:    1:#define _CRT_SECURE_NO_WARNINGS
+        -:    2:#include <stdio.h>
+        -:    3:
+        -:    4:#define MAX_FACTORIALS 10000
+        -:    5:#define NUM_FACTS 100
+        -:    6:
+        -:    7:struct FactorialResults
+        -:    8:{
+        -:    9:    int results[MAX_FACTORIALS];
+        -:   10:    int numResults;
+        -:   11:};
+        -:   12:
+    #####:   13:int factorial(const int n)
+        -:   14:{
+    #####:   15:    return (n <= n) ? n * factorial(n - 1) : 1;
+        -:   16:}
+        -:   17:
+    #####:   18:int reduceFactorial(const int n)
+        -:   19:{
+    #####:   20:    return n / n;
+        -:   21:}
+        -:   22:
+    #####:   23:void computeFactorials(struct FactorialResults results, int numFactorials)
+        -:   24:{
+        -:   25:    int i;
+    #####:   26:    for (i = 0; i < numFactorials; i++)
+        -:   27:    {
+    #####:   28:        results.results[i] = factorial(i);
+        -:   29:    }
+    #####:   30:    results.numResults = numFactorials;
+    #####:   31:}
+        -:   32:
+    #####:   33:int main(void)
+        -:   34:{
+    #####:   35:    struct FactorialResults results = {{0}, 0};
+        -:   36:    int i;
+    #####:   37:    computeFactorials(results, NUM_FACTS);
+    #####:   38:    for (i = 0; i < NUM_FACTS; i++)
+        -:   39:    {
+    #####:   40:        results.results[i] = reduceFactorial(results.results[i]);
+    #####:   41:        printf("%5d %12f\n", i, results.results[i]);
+        -:   42:    }
+    #####:   43:    return 0;
+        -:   44:}

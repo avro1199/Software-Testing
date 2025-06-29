@@ -1,0 +1,21 @@
+1. Final Project - cl compiler
+https://youtu.be/rqLbyj0TnIg
+
+2. Final Project - gcc Compiler on Windows
+https://youtu.be/DaiJoWr5fH0
+
+3. Final Project - gcc Compiler on Mac
+https://youtu.be/we2Oc4WQ7FM
+
+4. Final Project - V1
+https://youtu.be/Z1Kemarxbdw
+
+5. Final Project - git Installation
+https://youtu.be/Rhc0KzfLaBk
+
+6. Final Project - git Essentials
+https://youtu.be/mNnIh05iKjo
+
+7. Final Project - V2
+https://youtu.be/V0A_oBo1cHQ
+

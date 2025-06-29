@@ -1,0 +1,54 @@
+        -:    0:Source:Code.c
+        -:    0:Graph:Code.gcno
+        -:    0:Data:Code.gcda
+        -:    0:Runs:1
+        -:    1:#define _CRT_SECURE_NO_WARNINGS
+        -:    2:#include <stdio.h>
+        -:    3:
+        -:    4:#define MAX_FACTORIALS 10000
+        -:    5:#define NUM_FACTS 100
+        -:    6:
+        -:    7:struct FactorialResults
+        -:    8:{
+        -:    9:    int results[MAX_FACTORIALS];
+        -:   10:    int numResults;
+        -:   11:};
+        -:   12:
+     5050:   13:int factorial(const int n)
+        -:   14:{
+        -:   15:    // return (n <= n) ? n * factorial(n - 1) : 1; // bug-1: infinite recursion
+     5050:   16:    return (n >= 1) ? n * factorial(n - 1) : 1;
+        -:   17:}
+        -:   18:
+      100:   19:int reduceFactorial(const int n)
+        -:   20:{
+        -:   21:    // return n / n; // bug-2: zero division error
+      100:   22:    return (n > 0) ? n / n : 1;
+        -:   23:}
+        -:   24:
+        -:   25:// void computeFactorials(struct FactorialResults results, int numFactorials)//bug-3: pass by value
+        1:   26:void computeFactorials(struct FactorialResults *results, int numFactorials)
+        -:   27:{
+        -:   28:    int i;
+      101:   29:    for (i = 0; i < numFactorials; i++)
+        -:   30:    {
+        -:   31:        // results.results[i] = factorial(i);//bug-4: (.) used instead of (->)
+      100:   32:        results->results[i] = factorial(i);
+        -:   33:    }
+        -:   34:    // results.numResults = numFactorials;//bug-5: (.) used instead of (->)
+        1:   35:    results->numResults = numFactorials;
+        1:   36:}
+        -:   37:
+        1:   38:int main(void)
+        -:   39:{
+        1:   40:    struct FactorialResults results = {{0}, 0};
+        -:   41:    int i;
+        -:   42:    // computeFactorials(results, NUM_FACTS);//bug-6: call by valur
+        1:   43:    computeFactorials(&results, NUM_FACTS);
+      101:   44:    for (i = 0; i < NUM_FACTS; i++)
+        -:   45:    {
+      100:   46:        results.results[i] = reduceFactorial(results.results[i]);
+      100:   47:        printf("%5d %12d\n", i, results.results[i]);
+        -:   48:    }
+        1:   49:    return 0;
+        -:   50:}

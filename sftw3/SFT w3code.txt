@@ -1,0 +1,140 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+
+#define MAX_NAME_LENGTH 50
+#define MAX_ADDRESS_LENGTH 100
+#define MAX_CITY_LENGTH 50
+#define MAX_PROVINCE_LENGTH 10
+#define MAX_POSTAL_CODE_LENGTH 7
+
+struct Customer 
+{
+   char firstName[MAX_NAME_LENGTH +1];
+   char lastName[MAX_NAME_LENGTH+1];
+   char streetAddress[MAX_ADDRESS_LENGTH];
+   char city[MAX_CITY_LENGTH];
+   char province[MAX_PROVINCE_LENGTH];
+   char postalCode[MAX_POSTAL_CODE_LENGTH];
+};
+
+
+int isValidPostalCode(char *postalCode){
+
+char temp[MAX_POSTAL_CODE_LENGTH];
+int j = 0;
+
+//remove spaces and convert to uppercase
+for (int i = 0; postalCode[i])!= '\0'; i++) {
+if (!isspace(postalCode[i])){
+temp [j++] = toupper(postalCode[i]);
+		}
+	}
+
+temp[j] = '\0';
+
+//validate format: A1A 1A1
+
+if (strlen(temp) != 6){
+return 0;
+}
+
+if (!isalpha(temp[0]) || !isdigit(temp[1]) || !isalpha(temp[2]) ||
+        !isdigit(temp[3]) || !isalpha(temp[4]) || !isdigit(temp[5])) {
+        return 0;
+    }
+// Format to A1A 1A1
+    postalCode[0] = temp[0];
+    postalCode[1] = temp[1];
+    postalCode[2] = temp[2];
+    postalCode[3] = ' ';
+    postalCode[4] = temp[3];
+    postalCode[5] = temp[4];
+    postalCode[6] = temp[5];
+    postalCode[7] = '\0';
+
+    return 1;
+
+}
+
+
+Customer getCustomerInfo() {
+    Customer customer;
+    char buffer[MAX_ADDRESS_LENGTH];
+
+    // Helper function to get input and ensure it's not empty
+    void getInput(char *prompt, char *input, int maxLength) {
+        do {
+            printf("%s", prompt);
+            fgets(input, maxLength, stdin);
+            input[strcspn(input, "\n")] = '\0';  // Remove newline character
+        } while (strlen(input) == 0);
+    }
+
+    getInput("Enter your first name: ", customer.firstName, MAX_NAME_LENGTH);
+    getInput("Enter your last name: ", customer.lastName, MAX_NAME_LENGTH);
+    getInput("Enter your street address: ", customer.streetAddress, MAX_ADDRESS_LENGTH);
+    getInput("Enter your city: ", customer.city, MAX_CITY_LENGTH);
+    getInput("Enter your province: ", customer.province, MAX_PROVINCE_LENGTH);
+
+    while (1) {
+        getInput("Enter your postal code: ", buffer, MAX_POSTAL_CODE_LENGTH);
+        if (isValidPostalCode(buffer)) {
+            strcpy(customer.postalCode, buffer);
+            break;
+        }
+        printf("Invalid Entry: ");
+    }
+
+    return customer;
+}
+int main() {
+    Customer customer = getCustomerInfo();
+    printf("\nYou entered:\n");
+    printf("%s %s\n", customer.firstName, customer.lastName);
+    printf("%s\n", customer.streetAddress);
+    printf("%s, %s\n", customer.city, customer.province);
+    printf("%s\n", customer.postalCode);
+    return 0;
+}
+// Unit test 
+#include <assert.h>
+#include <stdio.h>
+
+// Test valid postal code
+void testValidPostalCode() {
+    char postalCode[] = "m2e 4x4";
+    assert(isValidPostalCode(postalCode) == 1);
+    assert(strcmp(postalCode, "M2E 4X4") == 0);
+}
+
+// Test invalid postal code
+void testInvalidPostalCode() {
+    char postalCode[] = "1234";
+    assert(isValidPostalCode(postalCode) == 0);
+}
+
+int main() {
+    testValidPostalCode();
+    testInvalidPostalCode();
+    printf("All tests passed!\n");
+    return 0;
+}
+
+
+
+reflection:
+
+
+To test the function gathering customer information, 
+I ensured that it repeatedly prompted the user until 
+non-blank inputs were provided. This was achieved by 
+checking the length of the input string and re-prompting
+ if it was empty. Although testing the issuance of correct
+ prompts for blank lines is beyond the scope, it can be
+ done using a mocking framework to simulate user input
+ and capture output. By redirecting standard input and
+ output, automated tests could validate that prompts appear
+ as expected when blank lines are entered, ensuring robustness
+ in handling user input errors.
